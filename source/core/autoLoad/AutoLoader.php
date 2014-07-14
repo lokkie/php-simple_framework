@@ -2,16 +2,30 @@
 
 namespace core\autoLoad;
 
+/**
+ * Auto-loadinfg system
+ **/
 abstract class AutoLoader {
 	
+	/**
+	 * @var array
+	 **/
 	static private $routes = [];
 	
+	/**
+	 * Loads files for speciffied class
+	 * @param string $className
+	 **/
 	static public function loadClass($className)
 	{
 		$fileName = static::loadRoutine($className);
 		self::includeClass($fileName);
 	}
 	
+	/**
+	 * Adds class loading route, by including scpecified class loader
+	 * @param string $part
+	 **/
 	static public function addCodeRoute($part)
 	{
 		if (!in_array($part, self::$routes)) {
@@ -23,8 +37,18 @@ abstract class AutoLoader {
 		}
 	}
 	
+	/**
+	 * Rules to load classes. Should by implemented in auto-loaders
+	 * @param string $className - name of class
+	 * @return string - path to file with class
+	 **/
 	static abstract protected function loadRoutine($className);
 	
+	/**
+	 * Includes specified file if exists. Othewise returns false
+	 * @param string $filleName - path to file
+	 * @return boolean - false on non-existing file
+	 **/
 	static function includeClass($fileName) 
 	{
 		$returnValue = false;

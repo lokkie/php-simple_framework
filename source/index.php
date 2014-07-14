@@ -5,11 +5,10 @@
  * Time: 13:42
  */ 
  
- 
- 
- 
-# load path constants && autoloader
-include_once dirname(__FILE__) . DIRECTORY_SEPARATOR . "path_constants.php"; 
+# including auto-loading system 
 require_once implode(DIRECTORY_SEPARATOR , [dirname(__FILE__), 'core', 'autoLoad', 'AutoLoader.php']);
+# enabling basic class route
 \core\autoLoad\AutoLoader::addCodeRoute('Basic');
 
+# load path constants && autoloader
+include_once dirname(__FILE__) . DIRECTORY_SEPARATOR . "path_constants.php";
