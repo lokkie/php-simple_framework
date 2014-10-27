@@ -25,11 +25,15 @@ abstract class AutoLoader {
 	/**
 	 * Adds class loading route, by including scpecified class loader
 	 * @param string $part
+	 * @param string $basePath
 	 **/
-	static public function addCodeRoute($part)
+	static public function addCodeRoute($part, $basePath = null)
 	{
+		if ($basePath === null) {
+			$basePath = dirname(__FILE__);
+		}
 		if (!in_array($part, self::$routes)) {
-			$fileName = implode(DIRECTORY_SEPARATOR, [dirname(dirname(dirname(__FILE__))), 'core', 'autoLoad', "{$part}AutoLoader"]) . '.php';
+			$fileName = implode(DIRECTORY_SEPARATOR, [$basePath, "{$part}AutoLoader"]) . '.php';
 			if ( self::includeClass($fileName) ) {
 				spl_autoload_register(__NAMESPACE__ . "\\{$part}AutoLoader::loadClass");
 				array_push(self::$routes, $part);

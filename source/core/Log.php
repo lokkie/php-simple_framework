@@ -44,13 +44,7 @@ class Log
     public static function d($tag, $data)
     {
         self::_init();
-        $backtrace = debug_backtrace(0, 2);
-        StorageOrganiser::createPath(self::$logPath . DIRECTORY_SEPARATOR . self::DEBUG_NAME);
-        file_put_contents(
-            self::$logPath . DIRECTORY_SEPARATOR . self::DEBUG_NAME,
-            sprintf("%s [%s]: %s (in %s:%d)\n", date("Y-m-d H:i:s"), $tag, $data, $backtrace[1]['file'], $backtrace[1]['line']),
-            FILE_APPEND
-        );
+        self::writeLog(self::$logPath . DIRECTORY_SEPARATOR . self::DEBUG_NAME, $tag, $data, self::findCallPosition());
     }
 
     /**
@@ -63,13 +57,29 @@ class Log
     public static function e($tag, $data)
     {
         self::_init();
-        $backtrace = debug_backtrace(0, 2);
-        StorageOrganiser::createPath(self::$logPath . DIRECTORY_SEPARATOR . self::ERROR_NAME);
-        file_put_contents(
-            self::$logPath . DIRECTORY_SEPARATOR . self::ERROR_NAME,
-            sprintf("%s [%s]: %s (in %s:%d)\n", date("Y-m-d H:i:s"), $tag, $data, $backtrace[1]['file'], $backtrace[1]['line']),
-            FILE_APPEND
-        );
+        self::writeLog(self::$logPath . DIRECTORY_SEPARATOR . self::ERROR_NAME, $tag, $data, self::findCallPosition());
+    }
+    
+    /**
+     * Returns plaace in code, where Log was called
+     * @return array
+     **/
+    private static function findCallPosition() 
+    {
+        return debug_backtrace(0, 2)[1];
+    }
+    
+    /**
+     * Writes to loag file provided data
+     * @param string $fileName
+     * @param string $tag
+     * @param mixed $data
+     * @param array $backtrace
+     **/
+    private static function writeLog($fileName, $tag, $data, $backtrace)
+    {
+        StorageOrganiser::createPath($fileName);
+        file_put_contents($fileName, sprintf("%s [%s]: %s (in %s:%d)\n", date("Y-m-d H:i:s"), $tag, $data, $backtrace['file'], $backtrace['line']), FILE_APPEND);
     }
 
     /**

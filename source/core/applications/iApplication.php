@@ -5,6 +5,6 @@ namespace core\applications;
 
 interface iApplication 
 {
-	public __constructor();
+	public __construct();
 	public function run();
 }
