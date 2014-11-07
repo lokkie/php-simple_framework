@@ -4,7 +4,7 @@ class TimeTest extends PHPUnit_Framework_TestCase
 {
 	public function testtimeFormat() {
 		$cases = [
-			'2m30s' => [90,0],
+			'2m30s' => [150,0],
 			'2h458mks' => [7200, 358000]
 		];
 		foreach ($cases as $case => $expected) {
