@@ -1,4 +1,9 @@
 language: php
 php:
-  - 5.5
-  - 5.4
+    - 5.5
+    - 5.4
+
+env:
+    - run=dev
+
+script: phpunit --configuration phpunit_$run.xml --coverage-text
