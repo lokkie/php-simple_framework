@@ -42,7 +42,9 @@ abstract class AutoLoader {
 	 * @param string $className - name of class
 	 * @return string - path to file with class
 	 **/
-	static abstract protected function loadRoutine($className);
+	static protected function loadRoutine($className) {
+		throw new BadMethodCallException('Should be called from child');
+	}
 	
 	/**
 	 * Includes specified file if exists. Othewise returns false
