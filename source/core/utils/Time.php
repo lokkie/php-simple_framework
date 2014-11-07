@@ -38,11 +38,11 @@ class Time {
 			$func_result[1] = (int) ((($interval * 1000) % 1000000) * 1000);
 			// to keep float value with microsec we should multiply 1000 first
 		} else if (is_string($interval)) {
-			$regEx = '/((\d+)(mks|ns|ms|m|s|h|d))/i'; // Modifiers RegExpr
+			$regEx = '/(?P<values>\d+)(?P<modifiers>mks|ns|ms|m|s|h|d)/i'; // Modifiers RegExpr
 			
 			if (preg_match_all($regEx, $interval, $intervals)) {
-				foreach ($intervals[2] as $index => $value) {
-					$modifier = $intervals[3][$index];
+				foreach ($intervals['values'] as $index => $value) {
+					$modifier = $intervals['modifiers'][$index];
 					
 					if (isset($nanoModifiers[$modifier])) { // nanoseconds
 						$func_result[1] += $value * $nanoModifiers[$modifier];
