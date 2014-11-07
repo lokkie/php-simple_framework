@@ -8,7 +8,10 @@ class TimeTest extends PHPUnit_Framework_TestCase
 			'2h458mks' => [7200, 358000]
 		];
 		foreach ($cases as $case => $expected) {
-			$this->assertEquals(\core\utils\Time::formatNanoInterval($case), $expected);
+			$nanoTime = \core\utils\Time::formatNanoInterval($case);
+			$this->assertEquals(count($nanoTime), count($expected));
+			$this->assertEquals($nanoTime[0], $expected[0]);
+			$this->assertEquals($nanoTime[1], $expected[1]);
 		}
 	}
 	
@@ -22,7 +25,7 @@ class TimeTest extends PHPUnit_Framework_TestCase
 		foreach ($cases as $case => $expect) {
 			$s = microtime(true);
 			\core\utils\Time::nanoSleep($case);
-			$this->assertLessThanOrEqual(abs(microtime(true) - s - $expect), $allowdedTimeShift);
+			$this->assertLessThanOrEqual(abs(microtime(true) - $s - $expect), $allowdedTimeShift);
 		}
 	}
 
