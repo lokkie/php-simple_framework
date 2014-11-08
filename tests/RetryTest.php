@@ -54,6 +54,7 @@ class RetryTest extends PHPUnit_Framework_TestCase {
 				. "Expecting counter {$caseSettings['counter']}.\n"
 				. "Expecting exceptions: " . implode(',', $caseSettings['correctExceptions'])
 			);
+			self::$exceptionProvider->reset();
 			try {
 				\core\utils\Retrying::retry(
 					[self::$exceptionProvider, $caseSettings['method']], 
