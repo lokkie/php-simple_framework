@@ -43,14 +43,37 @@ class RetryTest extends PHPUnit_Framework_TestCase {
 	
 	public function testDalayRetry() {
 		$time = new ExecutionTime;
-		self::$exceptionProvider->reset();
-		try {
-			$time->startWatching();
-			\core\utils\Retrying::retry([self::$exceptionProvider, 'runWithException'], [1], ['\Exception'], 3, 100, 50);
-		} catch (\Exception $error) {
-			$time->stopWatching();
-			var_dump($time->getTimeMks());
-			$this->assertEquals(3, self::$exceptionProvider->getCounter());
+		$cases = [
+			[
+				'method'=> 'runWithException', 
+				'movement' => 1, 
+				'correctExceptions' => ['\Exception'],
+				'tries' => 3, 
+				'interval' => 100,
+				'backoff' => 50,
+				'counter' => 3,
+				'excpectedTime' => 250000,
+				'executionShift' => 5*1000 
+			]
+		];
+		foreach ($cases as $caseSettings) {
+			self::$exceptionProvider->reset();
+			try {
+				$time->startWatching();
+				\core\utils\Retrying::retry(
+					[self::$exceptionProvider, $caseSettings['method']], 
+					[$caseSettings['movement']], 
+					$caseSettings['correctExceptions'], 
+					$caseSettings['tries'], 
+					$caseSettings['interval'], 
+					$caseSettings['backoff']
+				);
+			} catch (\Exception $error) {
+				$time->stopWatching();
+				var_dump("Running {$caseSettings['method']} in {$caseSettings['tries']} tries. Expecting time {$caseSettings['expectedTime']}, shift {$caseSettings['executionShift']}. Real shift: " . $time->getDeltaMks($caseSettings['expectedTime']));
+				$this->assertEquals(3, self::$exceptionProvider->getCounter());
+				$this->assertLessThanOrEqual($caseSettings['executionShift'], $time->getDeltaMks($caseSettings['excpectedTime']));
+			}
 		}
 	}
 }
