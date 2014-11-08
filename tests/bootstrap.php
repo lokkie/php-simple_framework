@@ -13,3 +13,5 @@ require_once implode(DIRECTORY_SEPARATOR , [dirname(dirname(__FILE__)), 'source'
 require_once implode(DIRECTORY_SEPARATOR , [dirname(dirname(__FILE__)), 'source', 'core', 'autoLoad', 'BasicAutoLoader.php']);
 # enabling basic class route
 \core\autoLoad\AutoLoader::addCodeRoute('Basic');
+
+require_once __DIR__ . DIRECTORY_SEPARATOR . "ExecutionTime.php";
