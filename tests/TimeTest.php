@@ -25,7 +25,7 @@ class TimeTest extends PHPUnit_Framework_TestCase
 		foreach ($cases as $case => $expect) {
 			$s = microtime(true);
 			\core\utils\Time::nanoSleep($case);
-			$this->assertLessThanOrEqual($allowdedTimeShift, abs(microtime(true) - $s - $expect));
+			$this->assertLessThanOrEqual($allowdedTimeShift, abs((microtime(true) - $s)*1000000 - $expect));
 		}
 	}
 
