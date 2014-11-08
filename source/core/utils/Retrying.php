@@ -31,11 +31,8 @@ class Retrying {
 	) {
 		$func_result = null;
 		// normalize time
-		$interval = \core\utils\Time::formatInterval($interval);
-		$backoff = \core\utils\Time::formatInterval($backoff);
-		
-		// Preparing interval 
-		$interval = self::formatInterval($interval);
+		$interval = \core\utils\Time::formatNanoInterval($interval);
+		$backoff = \core\utils\Time::formatNanoInterval($backoff);
 		
 		// prevent incorrect executing
 		if (!is_callable($callable)) {
