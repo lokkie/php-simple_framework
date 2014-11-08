@@ -10,7 +10,7 @@ class RetryTest extends PHPUnit_Framework_TestCase {
 		};
 		
 		try {
-			Retrying::retry($x, [], ['\Exception'], 3, 0, 0);
+			\core\utils\Retrying::retry($x, [], ['\Exception'], 3, 0, 0);
 		} catch (\Exception $error) {
 			$this->assertEquals(3, $counter);
 		}
