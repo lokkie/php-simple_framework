@@ -29,7 +29,7 @@ class TimeTest extends PHPUnit_Framework_TestCase
 			\core\utils\Time::nanoSleep($case);
 			$time->stopWatching();
 			var_dump("Test on {$expect} mks, delta: " . $time->getDeltaMks($expect));
-			$this->assertLessThanOrEqual($allowdedTimeShift, $time->getDeltaMks($expect));
+			$this->assertLessThanOrEqual($allowdedTimeShiftMks, $time->getDeltaMks($expect));
 		}
 	}
 
