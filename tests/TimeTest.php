@@ -19,13 +19,17 @@ class TimeTest extends PHPUnit_Framework_TestCase
 		$cases = [
 			'1s' => 1000000,
 			'20ms' => 20000,
-			'1s300ms' => 1300000
+			'1s300ms' => 1300000,
+			'2ms300mks'=> 2300
 			];
-		$allowdedTimeShift = 2000;
+		$allowdedTimeShiftMks = 2000;
+		$time = new ExecutionTime;
 		foreach ($cases as $case => $expect) {
-			$s = microtime(true);
+			$time->startWatching();
 			\core\utils\Time::nanoSleep($case);
-			$this->assertLessThanOrEqual($allowdedTimeShift, abs((microtime(true) - $s)*1000000 - $expect));
+			$time->stopWatching();
+			var_dump("Test on {$expect} mks, delta: " . $time->getDeltaMks($expect));
+			$this->assertLessThanOrEqual($allowdedTimeShift, $time->getDeltaMks($expect));
 		}
 	}
 

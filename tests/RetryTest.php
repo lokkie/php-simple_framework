@@ -40,4 +40,17 @@ class RetryTest extends PHPUnit_Framework_TestCase {
 		} 
 		$this->assertEquals(1, self::$exceptionProvider->getCounter());
 	}
+	
+	public function testDalayRetry() {
+		$time = new ExecutionTime;
+		self::$exceptionProvider->reset();
+		try {
+			$time->startWatching();
+			\core\utils\Retrying::retry([self::$exceptionProvider, 'runWithException'], [1], ['\Exception'], 3, 100, 50);
+		} catch (\Exception $error) {
+			$time->stopWatching();
+			var_dump($time->getTimeMks());
+			$this->assertEquals(3, self::$exceptionProvider->getCounter());
+		}
+	}
 }
