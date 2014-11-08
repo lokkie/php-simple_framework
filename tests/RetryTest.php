@@ -63,7 +63,7 @@ class RetryTest extends PHPUnit_Framework_TestCase {
 				'interval' => 150,
 				'backoff' => 0,
 				'counter' => 10,
-				'expectedTime' => 750000,
+				'expectedTime' => 600000,
 				'executionShift' => 6*1000 
 			]
 		];
