@@ -39,6 +39,35 @@ class RetryTest extends PHPUnit_Framework_TestCase {
 			$this->assertEquals(false, true);
 		} 
 		$this->assertEquals(1, self::$exceptionProvider->getCounter());
+		
+		$cases = [
+			['method'=> 'runWithException', 'movement' => 1, 'correctExceptions' => ['\Exception'], 'tries' => 3, 'counter' => 3],
+			['method'=> 'runWithException', 'movement' => 1, 'correctExceptions' => ['\RuntimeException'], 'tries' => 3, 'counter' => 1],
+			['method'=> 'runWithRuntimeException', 'movement' => 1, 'correctExceptions' => ['\RuntimeException'], 'tries' => 3, 'counter' => 3],
+			['method'=> 'runNoException', 'movement' => 1, 'correctExceptions' => ['\RuntimeException'], 'tries' => 3, 'counter' => 1],
+		];
+		
+		foreach ($cases as $caseSettings) {	
+			var_dump(
+				"Running {$caseSettings['method']} in {$caseSettings['tries']} tries"
+				. "and movement {$caseSettings['movement']}.\n"
+				. "Expecting counter {$caseSettings['counter']}.\n"
+				. "Expecting exceptions: " . implode(',', $caseSettings['correctExceptions'])
+			);
+			try {
+				\core\utils\Retrying::retry(
+					[self::$exceptionProvider, $caseSettings['method']], 
+					[$caseSettings['movement']], 
+					$caseSettings['correctExceptions'], 
+					$caseSettings['tries'], 
+					0, 0
+				);
+			} catch (\Exception $error) {
+				var_dump("Got real exception " . get_class($error));
+			}
+			var_dump("Real counter was: " . self::$exceptionProvider->getCounter());
+			$this->assertEquals($caseSettings['counter'], self::$exceptionProvider->getCounter());
+		}
 	}
 	
 	public function testDalayRetry() {
@@ -81,11 +110,13 @@ class RetryTest extends PHPUnit_Framework_TestCase {
 				);
 			} catch (\Exception $error) {
 				$time->stopWatching();
-				var_dump("Running {$caseSettings['method']} in {$caseSettings['tries']} tries. "
-					."Expecting time {$caseSettings['expectedTime']}, shift {$caseSettings['executionShift']}. "
+				var_dump("Running {$caseSettings['method']} in {$caseSettings['tries']} tries.\n"
+					."Expecting time {$caseSettings['expectedTime']}, shift {$caseSettings['executionShift']}.\n"
 					."Real time: " . $time->getTimeMks() 
-					. ". Real shift: " . $time->getDeltaMks($caseSettings['expectedTime']));
-				$this->assertEquals(3, self::$exceptionProvider->getCounter());
+					. ". Real shift: " . $time->getDeltaMks($caseSettings['expectedTime']) . "\n"
+					. "Expecting counter {$caseSettings['counter']}. Real counter: " . self::$exceptionProvider->getCounter()
+				);
+				$this->assertEquals($caseSettings['counter'], self::$exceptionProvider->getCounter());
 				$this->assertLessThanOrEqual($caseSettings['executionShift'], $time->getDeltaMks($caseSettings['expectedTime']));
 			}
 		}
