@@ -6,4 +6,4 @@ php:
 env:
     - run=dev
 
-script: phpunit --configuration phpunit_$run.xml --coverage-text
+script: phpunit --configuration phpunit_$run.xml --coverage-text --verbose
