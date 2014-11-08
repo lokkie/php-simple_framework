@@ -52,7 +52,7 @@ class RetryTest extends PHPUnit_Framework_TestCase {
 				'interval' => 100,
 				'backoff' => 50,
 				'counter' => 3,
-				'excpectedTime' => 250000,
+				'expectedTime' => 250000,
 				'executionShift' => 5*1000 
 			]
 		];
@@ -72,7 +72,7 @@ class RetryTest extends PHPUnit_Framework_TestCase {
 				$time->stopWatching();
 				var_dump("Running {$caseSettings['method']} in {$caseSettings['tries']} tries. Expecting time {$caseSettings['expectedTime']}, shift {$caseSettings['executionShift']}. Real shift: " . $time->getDeltaMks($caseSettings['expectedTime']));
 				$this->assertEquals(3, self::$exceptionProvider->getCounter());
-				$this->assertLessThanOrEqual($caseSettings['executionShift'], $time->getDeltaMks($caseSettings['excpectedTime']));
+				$this->assertLessThanOrEqual($caseSettings['executionShift'], $time->getDeltaMks($caseSettings['expectedTime']));
 			}
 		}
 	}
