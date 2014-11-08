@@ -81,7 +81,10 @@ class RetryTest extends PHPUnit_Framework_TestCase {
 				);
 			} catch (\Exception $error) {
 				$time->stopWatching();
-				var_dump("Running {$caseSettings['method']} in {$caseSettings['tries']} tries. Expecting time {$caseSettings['expectedTime']}, shift {$caseSettings['executionShift']}. Real shift: " . $time->getDeltaMks($caseSettings['expectedTime']));
+				var_dump("Running {$caseSettings['method']} in {$caseSettings['tries']} tries. "
+					."Expecting time {$caseSettings['expectedTime']}, shift {$caseSettings['executionShift']}. "
+					."Real time: " . $time->getTimeMks() 
+					. ". Real shift: " . $time->getDeltaMks($caseSettings['expectedTime']));
 				$this->assertEquals(3, self::$exceptionProvider->getCounter());
 				$this->assertLessThanOrEqual($caseSettings['executionShift'], $time->getDeltaMks($caseSettings['expectedTime']));
 			}
