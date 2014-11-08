@@ -24,7 +24,7 @@ class RetryTest extends PHPUnit_Framework_TestCase {
 		} catch (\Exception $error) {
 			$this->assertEquals(1, self::$exceptionProvider->getCounter());
 		}
-/*		var_dump('runWithRuntimeException test');
+		var_dump('runWithRuntimeException test');
 		self::$exceptionProvider->reset();
 		try {
 			\core\utils\Retrying::retry([self::$exceptionProvider, 'runWithRuntimeException'], [1], ['\RuntimeException'], 3, 0, 0);
@@ -39,6 +39,5 @@ class RetryTest extends PHPUnit_Framework_TestCase {
 			$this->assertEquals(false, true);
 		} 
 		$this->assertEquals(1, self::$exceptionProvider->getCounter());
-		*/
 	}
 }
