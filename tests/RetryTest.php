@@ -10,47 +10,17 @@ class RetryTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function testNoDelayRetry() {
-		var_dump('runWithException test');
-		self::$exceptionProvider->reset();
-		try {
-			\core\utils\Retrying::retry([self::$exceptionProvider, 'runWithException'], [1], ['\Exception'], 3, 0, 0);
-		} catch (\Exception $error) {
-			$this->assertEquals(3, self::$exceptionProvider->getCounter());
-		}
-		var_dump('runWithException incorrect Exception waiting test');
-		self::$exceptionProvider->reset();
-		try {
-			\core\utils\Retrying::retry([self::$exceptionProvider, 'runWithException'], [1], ['\RuntimeException'], 3, 0, 0);
-		} catch (\Exception $error) {
-			$this->assertEquals(1, self::$exceptionProvider->getCounter());
-		}
-		var_dump('runWithRuntimeException test');
-		self::$exceptionProvider->reset();
-		try {
-			\core\utils\Retrying::retry([self::$exceptionProvider, 'runWithRuntimeException'], [1], ['\RuntimeException'], 3, 0, 0);
-		} catch (\Exception $error) {
-			$this->assertEquals(3, self::$exceptionProvider->getCounter());
-		}
-		var_dump('runWithNoException test');
-		self::$exceptionProvider->reset();
-		try {
-			\core\utils\Retrying::retry([self::$exceptionProvider, 'runNoException'], [1], ['\RuntimeException'], 3, 0, 0);
-		} catch (\Exception $error) {
-			$this->assertEquals(false, true);
-		} 
-		$this->assertEquals(1, self::$exceptionProvider->getCounter());
-		
 		$cases = [
 			['method'=> 'runWithException', 'movement' => 1, 'correctExceptions' => ['\Exception'], 'tries' => 3, 'counter' => 3],
-			['method'=> 'runWithException', 'movement' => 1, 'correctExceptions' => ['\RuntimeException'], 'tries' => 3, 'counter' => 1],
-			['method'=> 'runWithRuntimeException', 'movement' => 1, 'correctExceptions' => ['\RuntimeException'], 'tries' => 3, 'counter' => 3],
+			['method'=> 'runWithException', 'movement' => 3, 'correctExceptions' => ['\RuntimeException'], 'tries' => 5, 'counter' => 1],
+			['method'=> 'runWithRuntimeException', 'movement' => 3, 'correctExceptions' => ['\RuntimeException'], 'tries' => 5, 'counter' => 15],
 			['method'=> 'runNoException', 'movement' => 1, 'correctExceptions' => ['\RuntimeException'], 'tries' => 3, 'counter' => 1],
 		];
 		
 		foreach ($cases as $caseSettings) {	
 			var_dump(
 				"Running {$caseSettings['method']} in {$caseSettings['tries']} tries"
-				. "and movement {$caseSettings['movement']}.\n"
+				. " and movement {$caseSettings['movement']}.\n"
 				. "Expecting counter {$caseSettings['counter']}.\n"
 				. "Expecting exceptions: " . implode(',', $caseSettings['correctExceptions'])
 			);
