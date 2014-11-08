@@ -54,6 +54,17 @@ class RetryTest extends PHPUnit_Framework_TestCase {
 				'counter' => 3,
 				'expectedTime' => 250000,
 				'executionShift' => 5*1000 
+			],
+			[
+				'method'=> 'runWithRuntimeException', 
+				'movement' => 2, 
+				'correctExceptions' => ['\RuntimeException'],
+				'tries' => 5, 
+				'interval' => 150,
+				'backoff' => 0,
+				'counter' => 10,
+				'expectedTime' => 750000,
+				'executionShift' => 6*1000 
 			]
 		];
 		foreach ($cases as $caseSettings) {
