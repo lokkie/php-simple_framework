@@ -43,12 +43,15 @@ class Retrying {
 		// until tries end or success call
 		while ($tries > 0 && !$success) { 
 			try {
+				
 				$func_result = call_user_func_array($callable, $args);
 				$success = true;
 			} catch (\Exception $anyError) {
+				$found = false;
 				// search error in allowded list
 				foreach ($watchExceptions as $exceptionStructure) {
 					if ($anyError instanceof $exceptionStructure) {
+						$found = true;
 						$tries--;
 						if ($tries == 0) { // if it was last try
 										// bouble Exception up
@@ -66,6 +69,9 @@ class Retrying {
 						}
 						break 1;
 					}
+				}
+				if (!$found) {
+					throw $anyError;
 				}
 			}
 		}
